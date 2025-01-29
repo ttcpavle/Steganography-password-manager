@@ -19,4 +19,4 @@ Every pixel in the image has some number of color components (channels) like RGB
 When we want to load the image everything is done in reverse. We first read 32 bits sequentially from each pixels color components. Now we have UID and we can retrieve password metadata from JSON. The next step is to read all bytes of serialized object. After that, we can compare SHA256 checksum from passwrod metadata with extracted bytes SHA256 checksum. If they are the same, that means no data is lost. Than, if everything is right, password, name and note will be displayed.
 
 # How to use
-
+Import as Maven project in Eclipse IDE and run.
