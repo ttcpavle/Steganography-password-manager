@@ -37,6 +37,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
+import java.awt.Window.Type;
 
 public class GUI extends JFrame {
 
@@ -117,13 +118,14 @@ public class GUI extends JFrame {
 	 * Create the frame.
 	 */
 	public GUI() {
+		setForeground(new Color(184, 134, 11));
 		setResizable(false);
 		setTitle("Steganography Password Manager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 600);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(112, 128, 144));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(new Color(255, 165, 0));
+		contentPane.setBorder(new LineBorder(new Color(0, 0, 0), 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -204,7 +206,7 @@ public class GUI extends JFrame {
 	}
 	private JRadioButton getAes() {
 		if (aes == null) {
-			aes = new JRadioButton("Use AES encryption");
+			aes = new JRadioButton("Use AES encryption (not implemented)");
 			aes.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(aes.isSelected()) {
@@ -212,7 +214,7 @@ public class GUI extends JFrame {
 					}
 				}
 			});
-			aes.setBounds(10, 376, 143, 21);
+			aes.setBounds(10, 376, 222, 21);
 		}
 		return aes;
 	}
@@ -328,7 +330,7 @@ public class GUI extends JFrame {
 	}
 	private JButton getAbortButton() {
 		if (abortButton == null) {
-			abortButton = new JButton("Abort");
+			abortButton = new JButton("Clear");
 			abortButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					noteText.setText(null);

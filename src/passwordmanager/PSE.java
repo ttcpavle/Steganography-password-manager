@@ -20,8 +20,6 @@ import java.io.*;
 // Password Steganographic Encoding
 public class PSE {
 	
-	private static final String tempFilePath = "tmp/data_to_embed.dat";
-	private static final String tempFilePath2 = "tmp/serialized_object.dat";
 	boolean encrypted;
 	
 	public void hideData(
@@ -38,12 +36,18 @@ public class PSE {
 		DataTransferObject dto = new DataTransferObject();
 		dto.setName(name);
 		dto.setPassword(password);
-		dto.setNote(note);
+		dto.setNote(note);	
 		
-		Path path = Paths.get(tempFilePath);		
+		// serialize object
+		File datafile = null;
+		Path path = null;
+		try {
+			datafile = File.createTempFile("data_to_embed", ".dat");
+			path = datafile.toPath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-		// serialize object (save it in tempFilePath)
-		File datafile = new File(tempFilePath);
 		try(ObjectOutputStream data = 
 				new ObjectOutputStream(
 						new BufferedOutputStream(
@@ -125,7 +129,6 @@ public class PSE {
 			}
 			// store image and delete serialized object file
 			ImageIO.write(image, "png", img);
-			Files.delete(path);
             
 		}catch(IOException e) {
 		    e.printStackTrace();;
@@ -141,7 +144,15 @@ public class PSE {
 		this.encrypted = false;
 		DataTransferObject temp = null;
 				
-		Path path = Paths.get(tempFilePath2);
+		File datafile2 = null;
+		Path path = null;
+		try {
+			datafile2 = File.createTempFile("data_to_embed_recreated", ".dat");
+			path = datafile2.toPath();
+			datafile2.deleteOnExit();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		try{
 			File img = new File(imagePath); // image to read data from
@@ -214,7 +225,7 @@ public class PSE {
     		System.arraycopy(bytesBuffer, 4, serializedFileBytes, 0, bytesToRead);
     		
             // recreate serialized object file
-            try (FileOutputStream f = new FileOutputStream(tempFilePath2)) {
+            try (FileOutputStream f = new FileOutputStream(datafile2)) {
                 f.write(serializedFileBytes);
             }
                         
@@ -227,15 +238,13 @@ public class PSE {
             
             try (ObjectInputStream in = new ObjectInputStream(
             		new BufferedInputStream(
-            				new FileInputStream(tempFilePath2)))){
+            				new FileInputStream(datafile2)))){
             	temp = (DataTransferObject)in.readObject();
             	
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
 			
-            
-            Files.delete(path);
             
 		}catch(IOException e) {
 		    e.printStackTrace();
